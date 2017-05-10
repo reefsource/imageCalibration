@@ -3,6 +3,7 @@ function [ histogram, map ] = computeHistogramGT( I, keypoints, varargin )
 p = inputParser;
 p.addOptional('spatialDelta',5);
 p.addOptional('intensityDelta',0.05);
+p.addOptional('mask',[]);
 p.parse(varargin{:});
 inputs = p.Results;
 
@@ -10,6 +11,10 @@ inputs = p.Results;
 h = size(I,1);
 w = size(I,2);
 c = size(I,3);
+
+if isempty(inputs.mask)
+    inputs.mask = true(h*w,1);
+end
 
 Ivec = reshape(I,[h*w,c]);
 
@@ -35,12 +40,14 @@ for i=1:size(keypoints,1)
                 
         
         
-        ids = (Ivec(:,1) > Ir-inputs.intensityDelta & Ivec(:,1) < Ir + inputs.intensityDelta) & ...
-              (Ivec(:,2) > Ig-inputs.intensityDelta & Ivec(:,2) < Ig + inputs.intensityDelta) & ...
-              (Ivec(:,3) > Ib-inputs.intensityDelta & Ivec(:,3) < Ib + inputs.intensityDelta);
+        ids = ((Ivec(:,1) > (Ir-inputs.intensityDelta)) & (Ivec(:,1) < (Ir + inputs.intensityDelta))) & ...
+              ((Ivec(:,2) > (Ig-inputs.intensityDelta)) & (Ivec(:,2) < (Ig + inputs.intensityDelta))) & ...
+              ((Ivec(:,3) > (Ib-inputs.intensityDelta)) & (Ivec(:,3) < (Ib + inputs.intensityDelta)));
         
-        histogram(mod(i-1,6)+1) = histogram(mod(i-1,6)+1) + sum(ids);
-        map(ids) = mod(i-1,6)+1;
+        histogram(mod(i-1,6)+1) = histogram(mod(i-1,6)+1) + sum(ids(inputs.mask));
+        
+        
+        map(inputs.mask(:) & ids) = (mod(i-1,6)+1);
         
 end
 

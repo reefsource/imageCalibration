@@ -3,15 +3,19 @@ clear all;
 clc;
 
 dbPath = fullfile('/','Users','hblasinski','Documents','MATLAB',...
-    'reefsource','imageCalibration','SamplesWithTarget');
+    'reefsource','imageCalibration','SampleImagesWithTarget');
 
 
+results = fopen('ImageHistograms.csv','w');
+fprintf(results,'; Estimated histograms; ; ; ; ; ; Ground truth\n');
+fprintf(results,'Image name; 1; 2; 3; 4; 5; 6\n');    
 
-files = dir(fullfile(dbPath,'*.GPR'));
+
 
 %%
+files = dir(fullfile(dbPath,'*.GPR'));
 
-for f=10:length(files)
+for f=1:length(files)
     
     imagePath = fullfile(dbPath,files(f).name);
     
@@ -34,6 +38,21 @@ for f=10:length(files)
     [hLinGT, mapLinGT] = computeHistogramGT(I,keypoints,'intensityDelta',0.15);
     [hGamGT, mapGamGT] = computeHistogramGT(Igm,keypoints,'intensityDelta',0.15);
     
+    
+    fprintf(results,'%s; ',files(f).name);
+    for j=1:6
+        fprintf(results,'%f; ',hLin(j));
+    end
+    for j=1:6
+        fprintf(results,'%f; ',hLinGT(j));
+    end
+    fprintf(results,'\n');
+    
+    [~, fN] = fileparts(files(f).name);
+    imwrite(Igm,fullfile(dbPath,sprintf('%s.jpg',fN)));
+    
+    
+    %{
     figure;
     subplot(1,2,1);
     imshow(Igm);
@@ -56,6 +75,8 @@ for f=10:length(files)
     subplot(2,3,6);
     imagesc(mapGamGT);
     
-    
+    %}
     
 end
+
+fclose(results);

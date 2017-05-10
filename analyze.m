@@ -3,7 +3,7 @@ clear all;
 clc;
 
 dbPath = fullfile('/','Users','hblasinski','Documents','MATLAB',...
-    'reefsource','imageCalibration','SamplesWithTarget');
+    'reefsource','imageCalibration','SampleImagesWithTarget');
 
 files = dir(fullfile(dbPath,'*.GPR'));
 
@@ -43,6 +43,15 @@ for f=1:length(files)
         close(fg);
     end
     
+    if ~exist('boundingBox','var');
+        fg = figure; 
+        imshow(I);
+        boundingBox = getrect();
+        save(fullfile(dbPath,sprintf('%s.mat',keypointFile)),'boundingBox','-append');
+        close(fg);
+    end
+
+    
     
     [h1, kV{f}] = computeHistogramV2(I,keypoints,mask);
     
@@ -52,6 +61,7 @@ for f=1:length(files)
     subplot(1,2,2);
     bar(h1);
 
+    clear boundingBox;
 end
 
 %%
@@ -73,6 +83,8 @@ for f=1:length(files)
    totalKeypoints = [totalKeypoints; kV{f}];
    totalLabels = [totalLabels; repmat((1:6)',4,1)];
 end
+
+save('linearKeypoints.mat','totalKeypoints','totalLabels');
 
 %% Train a classifier
 
