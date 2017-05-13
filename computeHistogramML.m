@@ -4,6 +4,7 @@ p = inputParser;
 p.addOptional('linear',true);
 p.addOptional('scale',0.25);
 p.addOptional('mask',[]);
+p.addOptional('path','./data/');
 p.parse(varargin{:});
 inputs = p.Results;
 
@@ -26,10 +27,12 @@ Ivec = reshape(I,[h*w,c]);
 Ivec = Ivec(mask(:),2:3);
 
 if inputs.linear
-    load('svmLinearData.mat');
+    load(fullfile(inputs.path,'svmLinearData.mat'));
 else
-    load('svmGammaData.mat');
+    load(fullfile(inputs.path,'svmGammaData.mat'));
 end
+
+%# function ClassificationECOC
 
 predictions = predict(model,Ivec);
 map = zeros(h*w,1);

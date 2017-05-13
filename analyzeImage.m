@@ -1,6 +1,7 @@
 function analyzeImage( fileName, varargin )
 
 p = inputParser;
+p.KeepUnmatched = true;
 p.addOptional('previewHeight',768);
 p.addOptional('previewWidth',1024);
 p.parse(varargin{:});
@@ -41,7 +42,7 @@ if isempty(prevI)
 end
 
 % Pre-process the image
-mask = segmentImage(prevI,'path','/Users/hblasinski/Documents/MATLAB/reefsource/coralClassification');
+mask = segmentImage(prevI,varargin{:});
 if sum(mask(:)==1) == 0, mask = []; end
 
 
