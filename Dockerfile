@@ -33,10 +33,10 @@ COPY bin/image-analyze-aws.sh /image-analyze-aws.sh
 COPY bin/image-analyze.sh /image-analyze.sh
 
 COPY libs/analyzeImage /analyzeImage
-COPY libs/devkit/meta.mat /data/meta.mat
-COPY libs/devkit/descriptors/normalizer.mat /data/descriptors/normalizer.mat
-COPY libs/devkit/libsvm /data/libsvm
-COPY libs/devkit/descriptors/model.dat /data/descriptors/model.dat
+COPY libs/meta.mat /data/meta.mat
+COPY libs/normalizer.mat /data/descriptors/normalizer.mat
+COPY libs/libsvm /data/libsvm
+COPY libs/model.dat /data/descriptors/model.dat
 COPY libs/svmLinearData.mat /data/svmLinearData.mat
 
 WORKDIR /data/libsvm
