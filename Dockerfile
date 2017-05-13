@@ -44,4 +44,4 @@ RUN make clean
 RUN make
 WORKDIR /
 
-ENTRYPOINT ["./bin/image-analyze-aws.sh"]
+ENTRYPOINT ["./image-analyze-aws.sh"]
