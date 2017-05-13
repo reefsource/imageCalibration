@@ -6,12 +6,14 @@ MAINTAINER Henryk Blasinski <hblasins@stanford.edu>
 RUN apt-get update -y && apt-get upgrade -y && apt-get install -y \
     dcraw \
     unzip \
-    xorg \
     wget \
     curl \
     libssl-dev \
     libffi-dev \
     python-dev
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y keyboard-configuration
+RUN apt-get install -y --no-install-recommends xorg
 
 RUN mkdir /mcr-install && \
     mkdir /opt/mcr && \
