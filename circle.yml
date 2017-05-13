@@ -26,8 +26,8 @@ deployment:
     branch: master
     owner: reefsource
     commands:
-      - docker build --tag 078097297037.dkr.ecr.us-east-1.amazonaws.com/image_preprocessor:$CIRCLE_BUILD_NUM .
-      - docker push 078097297037.dkr.ecr.us-east-1.amazonaws.com/image_preprocessor:$CIRCLE_BUILD_NUM
+      - docker build --tag 078097297037.dkr.ecr.us-east-1.amazonaws.com/image_calibration:$CIRCLE_BUILD_NUM .
+      - docker push 078097297037.dkr.ecr.us-east-1.amazonaws.com/image_calibration:$CIRCLE_BUILD_NUM
       - ./deploy.py --image_tag $CIRCLE_BUILD_NUM
 
 
