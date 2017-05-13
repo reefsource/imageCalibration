@@ -45,9 +45,9 @@ class DeploymentManager():
         return response['taskDefinition']['revision']
 
     def deploy(self, image_tag):
-        env_vars = self.get_env_variables_by_env_name('image_preprocessor')
+        env_vars = self.get_env_variables_by_env_name('image_calibration')
 
-        template = self.get_template(image_tag, task_family='image_preprocessor', env_vars=env_vars)
+        template = self.get_template(image_tag, task_family='image_calibration', env_vars=env_vars)
         self.register_task_definition(template)
 
 

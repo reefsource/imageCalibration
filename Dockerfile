@@ -27,16 +27,19 @@ RUN apt-get install -y libssl-dev libffi-dev python-dev
 # ENV LD_LIBRARY_PATH /opt/mcr/v901/runtime/glnxa64:/opt/mcr/v901/bin/glnxa64:/opt/mcr/v901/sys/os/glnxa64
 ENV XAPPLRESDIR /opt/mcr/v901/X11/app-defaults
 
-COPY analyzeImage /analyzeImage
-COPY image-analyze-aws.sh /image-analyze-aws.sh
-COPY image-analyze.sh /image-analyze.sh
-COPY devkit/meta.mat /data/meta.mat
-COPY devkit/descriptors/normalizer.mat /data/descriptors/normalizer.mat
-COPY devkit/libsvm /data/libsvm
-COPY devkit/descriptors/model.dat /data/descriptors/model.dat
-COPY svmLinearData.mat /data/svmLinearData.mat
+COPY src/image-analyze-aws.sh /image-analyze-aws.sh
+COPY src/image-analyze.sh /image-analyze.sh
+
+COPY libs/analyzeImage /analyzeImage
+COPY libs/devkit/meta.mat /data/meta.mat
+COPY libs/devkit/descriptors/normalizer.mat /data/descriptors/normalizer.mat
+COPY libs/devkit/libsvm /data/libsvm
+COPY libs/devkit/descriptors/model.dat /data/descriptors/model.dat
+COPY libs/svmLinearData.mat /data/svmLinearData.mat
 
 WORKDIR /data/libsvm
 RUN make clean
 RUN make
 WORKDIR /
+
+ENTRYPOINT ["./bin/image-analyze-aws.sh"]
