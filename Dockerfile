@@ -3,13 +3,17 @@ MAINTAINER Henryk Blasinski <hblasins@stanford.edu>
 
 # Install the MCR dependencies and some things we'll need and download the MCR
 # from Mathworks -silently install it
-RUN apt-get -qq update && apt-get -qq install -y \
+RUN apt-get update -y && apt-get upgrade -y && apt-get install -y \
     dcraw \
     unzip \
     xorg \
     wget \
-    curl && \
-    mkdir /mcr-install && \
+    curl \
+    libssl-dev \
+    libffi-dev \
+    python-dev
+
+RUN mkdir /mcr-install && \
     mkdir /opt/mcr && \
     cd /mcr-install && \
     wget https://www.mathworks.com/supportfiles/downloads/R2016a/deployment_files/R2016a/installers/glnxa64/MCR_R2016a_glnxa64_installer.zip && \
@@ -18,10 +22,6 @@ RUN apt-get -qq update && apt-get -qq install -y \
     ./install -destinationFolder /opt/mcr -agreeToLicense yes -mode silent && \
     cd / && \
     rm -rf mcr-install
-
-RUN apt-get upgrade -y
-RUN apt-get install -y libssl-dev libffi-dev python-dev
-
 
 # Configure environment variables for MCR
 # ENV LD_LIBRARY_PATH /opt/mcr/v901/runtime/glnxa64:/opt/mcr/v901/bin/glnxa64:/opt/mcr/v901/sys/os/glnxa64
