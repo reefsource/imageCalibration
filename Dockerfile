@@ -18,7 +18,7 @@ RUN apt-get install -y --no-install-recommends xorg
 RUN mkdir /mcr-install && \
     mkdir /opt/mcr && \
     cd /mcr-install && \
-    wget https://www.mathworks.com/supportfiles/downloads/R2016a/deployment_files/R2016a/installers/glnxa64/MCR_R2016a_glnxa64_installer.zip && \
+    wget --quiet https://www.mathworks.com/supportfiles/downloads/R2016a/deployment_files/R2016a/installers/glnxa64/MCR_R2016a_glnxa64_installer.zip && \
     cd /mcr-install && \
     unzip -q MCR_R2016a_glnxa64_installer.zip && \
     ./install -destinationFolder /opt/mcr -agreeToLicense yes -mode silent && \
@@ -29,8 +29,8 @@ RUN mkdir /mcr-install && \
 # ENV LD_LIBRARY_PATH /opt/mcr/v901/runtime/glnxa64:/opt/mcr/v901/bin/glnxa64:/opt/mcr/v901/sys/os/glnxa64
 ENV XAPPLRESDIR /opt/mcr/v901/X11/app-defaults
 
-COPY src/image-analyze-aws.sh /image-analyze-aws.sh
-COPY src/image-analyze.sh /image-analyze.sh
+COPY bin/image-analyze-aws.sh /image-analyze-aws.sh
+COPY bin/image-analyze.sh /image-analyze.sh
 
 COPY libs/analyzeImage /analyzeImage
 COPY libs/devkit/meta.mat /data/meta.mat
