@@ -1,6 +1,7 @@
 #!/bin/bash
 
 inputFileName=$1
+upload_id=$2
 
 AWS_PATH=$(dirname $inputFileName)
 FILE_NAME=$(echo "${inputFileName##*/}")
@@ -11,7 +12,7 @@ echo "AWS path: $AWS_PATH"
 echo "File name: $FILE_NAME"
 
 aws s3 cp $inputFileName /$FILE_NAME.GPR
-aws s3 cp $AWS_PATH/$FILE_NAME.json /$FILE_NAME.json
+aws s3 cp $AWS_PATH/${FILE_NAME}_stage1.json /$FILE_NAME.json
 
 # This is necessary to run Matlab Runtime Environment
 # But causes some conflicts with awscli
@@ -21,4 +22,6 @@ export LD_LIBRARY_PATH="/opt/mcr/v901/runtime/glnxa64:/opt/mcr/v901/bin/glnxa64:
 export LD_LIBRARY_PATH=""
 
 aws s3 cp $FILE_NAME"_labels.png" $AWS_PATH/$FILE_NAME"_labels.png"
-aws s3 cp $FILE_NAME.json $AWS_PATH/$FILE_NAME.json
+aws s3 cp $FILE_NAME.json $AWS_PATH/${FILE_NAME}_stage2.json
+
+curl -H "Content-Type: application/json" -X POST -d '`cat ~/$FILE_NAME.json`' http://coralreefsource.org/api/v1/results/stage2complete/$upload_id/
