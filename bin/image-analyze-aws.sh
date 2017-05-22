@@ -24,4 +24,4 @@ export LD_LIBRARY_PATH=""
 aws s3 cp $FILE_NAME"_labels.png" $AWS_PATH/$FILE_NAME"_labels.png"
 aws s3 cp $FILE_NAME.json $AWS_PATH/${FILE_NAME}_stage2.json
 
-curl -H "Content-Type: application/json" -X POST -d '`cat ~/$FILE_NAME.json`' http://coralreefsource.org/api/v1/results/stage2complete/$upload_id/
+curl -H "Content-Type: application/json" -X POST -d '{"json": "`cat ~/$FILE_NAME.json`", "uploaded_file_id":"'${upload_id}'"}' http://coralreefsource.org/api/v1/results/stage2complete/
