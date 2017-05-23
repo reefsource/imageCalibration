@@ -10,7 +10,8 @@ RUN apt-get update -y && apt-get upgrade -y && apt-get install -y \
     curl \
     libssl-dev \
     libffi-dev \
-    python-dev
+    python-dev \
+    jq
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y keyboard-configuration
 RUN apt-get install -y --no-install-recommends xorg
