@@ -21,7 +21,7 @@ export LD_LIBRARY_PATH="/opt/mcr/v901/runtime/glnxa64:/opt/mcr/v901/bin/glnxa64:
 /analyzeImage /$FILE_NAME.GPR "path" "/data"
 export LD_LIBRARY_PATH=""
 
-aws s3 cp $FILE_NAME"_labels.png" $AWS_PATH/$FILE_NAME"_labels.png"
+aws s3 cp $FILE_NAME"_labels.png" $AWS_PATH/$FILE_NAME"_labels.png" --acl 'public-read'
 aws s3 cp $FILE_NAME.json $AWS_PATH/${FILE_NAME}_stage2.json
 
-jq -n --arg results "`cat ${FILE_NAME}.json`" --arg upload_id "$upload_id" '{json:$results, uploaded_file_id: $upload_id}' | curl -H "Content-Type: application/json" -X POST -d@- http://coralreefsource.org/api/v1/results/stage2complete/
+jq -n --arg upload_id "$upload_id" '{uploaded_file_id: $upload_id}' | curl -H "Content-Type: application/json" -X POST -d@- http://coralreefsource.org/api/v1/results/stage2complete/
