@@ -24,4 +24,7 @@ export LD_LIBRARY_PATH=""
 aws s3 cp $FILE_NAME"_labels.png" $AWS_PATH/$FILE_NAME"_labels.png" --acl 'public-read'
 aws s3 cp $FILE_NAME.json $AWS_PATH/${FILE_NAME}_stage2.json
 
-jq -n --arg upload_id "$upload_id" '{uploaded_file_id: $upload_id}' | curl -H "Content-Type: application/json" -X POST -d@- http://coralreefsource.org/api/v1/results/stage2complete/
+jq -n --arg upload_id "$upload_id" '{uploaded_file_id: $upload_id}' | curl \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Token ${AUTH_TOKEN}" \
+    -X POST -d@- http://coralreefsource.org/api/v1/results/stage2complete/
