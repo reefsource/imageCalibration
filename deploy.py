@@ -9,7 +9,7 @@ import boto3
 class DeploymentManager():
     def __init__(self):
         self.client = boto3.client('ecs')
-        self.cluster = 'reefsource'
+        self.cluster = 'reefsource-workers'
 
     def get_env_variables_by_env_name(self, environment_name):
         '''
@@ -36,7 +36,7 @@ class DeploymentManager():
             "containerDefinitions": [{
                 "name": task_family,
                 "image": "078097297037.dkr.ecr.us-east-1.amazonaws.com/{task_family}:{image_tag}".format(task_family=task_family, image_tag=image_tag),
-                "memory": 2560,
+                "memory": 3096,
                 "memoryReservation": 2048,
                 "environment": env_vars,
                 'logConfiguration': {
