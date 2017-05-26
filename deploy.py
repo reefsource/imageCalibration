@@ -2,6 +2,7 @@
 
 import argparse
 import json
+
 import boto3
 
 
@@ -36,7 +37,15 @@ class DeploymentManager():
                 "name": task_family,
                 "image": "078097297037.dkr.ecr.us-east-1.amazonaws.com/{task_family}:{image_tag}".format(task_family=task_family, image_tag=image_tag),
                 "memoryReservation": 1536,
-                "environment": env_vars
+                "environment": env_vars,
+                'logConfiguration': {
+                    'logDriver': 'awslogs',
+                    'options': {
+                        "awslogs-group": "reefsource",
+                        "awslogs-region": "us-east-1",
+                        "awslogs-stream-prefix": "imageCalibration"
+                    }
+                }
             }]
         }
 
