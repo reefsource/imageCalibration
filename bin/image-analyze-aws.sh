@@ -2,6 +2,9 @@
 
 inputFileName=$1
 upload_id=$2
+long=$3
+lat=$4
+album_date=$5 #iso 8601
 
 AWS_PATH=$(dirname $inputFileName)
 FILE_NAME=$(echo "${inputFileName##*/}")
