@@ -4,6 +4,7 @@ p = inputParser;
 p.KeepUnmatched = true;
 p.addOptional('previewHeight',768);
 p.addOptional('previewWidth',1024);
+p.addOptional('DEBUG',false);
 p.parse(varargin{:});
 inputs = p.Results;
 
@@ -15,7 +16,9 @@ jsonFileName = fullfile(path,sprintf('%s.json',imageFileName));
 
 if exist(jsonFileName,'file')
     jsonData = loadjson(jsonFileName);
-    jsonData = jsonData{1};
+    if iscell(jsonData)
+        jsonData = jsonData{1};
+    end
 else
     jsonData = struct();
 end
@@ -42,14 +45,23 @@ if isempty(prevI)
 end
 
 % Pre-process the image
+
 mask = segmentImage(prevI,varargin{:});
+% mask = segmentImage(I.^(1/2.2),varargin{:});
+
 if sum(mask(:)==1) == 0, mask = []; end
 
+if inputs.DEBUG
+    figure; 
+    imagesc(mask);
+    set(gca,'position',[0 0 1 1],'units','normalized');
+    % print('-dpng','Mask.png');
+end
 
    
 
 % Compute the histogram
-[histogram, map] = computeHistogramML(I, 'mask', mask);
+[histogram, map] = computeHistogramML(I, 'mask', mask, varargin{:});
 
 map = imresize(map,[previewHeight, previewWidth],'nearest');
 colorMap = jet(6);
@@ -63,6 +75,14 @@ mapRGBvec(~mask(:),:) = prevIvec(~mask(:),:);
 mapRGB = reshape(mapRGBvec,[previewHeight, previewWidth, 3]);
 
 imwrite(mapRGB,fullfile(path,sprintf('%s_labels.png',imageFileName)));
+
+if inputs.DEBUG
+    figure; imshow(mapRGB);
+    fs = 20;
+    figure; bar(histogram);
+    xlabel('Coral health','FontSize',fs);
+    % print('-dpng','Histogram.png');
+end
 
 jsonData.coral.histogram.values = histogram;
 jsonData.coral.histogram.bins = 1:6;

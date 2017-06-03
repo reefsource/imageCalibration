@@ -1,6 +1,7 @@
 function [ histogram, map ] = computeHistogramML( I, varargin )
 
 p = inputParser;
+p.KeepUnmatched = true;
 p.addOptional('linear',true);
 p.addOptional('scale',0.25);
 p.addOptional('mask',[]);
@@ -27,9 +28,9 @@ Ivec = reshape(I,[h*w,c]);
 Ivec = Ivec(mask(:),2:3);
 
 if inputs.linear
-    load(fullfile(inputs.path,'svmLinearData.mat'));
+    load(fullfile(inputs.path,'data','svmLinearData.mat'));
 else
-    load(fullfile(inputs.path,'svmGammaData.mat'));
+    load(fullfile(inputs.path,'data','svmGammaData.mat'));
 end
 
 %# function ClassificationECOC

@@ -24,6 +24,15 @@ export LD_LIBRARY_PATH="/opt/mcr/v901/runtime/glnxa64:/opt/mcr/v901/bin/glnxa64:
 /analyzeImage /$FILE_NAME.GPR "path" "/data"
 export LD_LIBRARY_PATH=""
 
+
+# If the .json file does not have geo-data, replace it
+if [ $(jq '.GPSLatitude' $FILE_NAME.json)=="" ]
+    then
+        jq '.GPSLatitude=$lat | .GPSLongitude=$long | .GPSPosition="$lat, $lon"' $FILE_NAME.json > $FILE_NAME_tmp.json
+fi
+mv $FILE_NAME_tmp.json $FILE_NAME.json
+
+
 aws s3 cp $FILE_NAME"_labels.png" $AWS_PATH/$FILE_NAME"_labels.png" --acl 'public-read'
 aws s3 cp $FILE_NAME.json $AWS_PATH/${FILE_NAME}_stage2.json
 
