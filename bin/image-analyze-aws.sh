@@ -25,12 +25,18 @@ export LD_LIBRARY_PATH="/opt/mcr/v901/runtime/glnxa64:/opt/mcr/v901/bin/glnxa64:
 export LD_LIBRARY_PATH=""
 
 
-# If the .json file does not have geo-data, replace it
-if [ $(jq '.GPSLatitude' $FILE_NAME.json)=="" ]
-    then
-        jq '.GPSLatitude=$lat | .GPSLongitude=$long | .GPSPosition="$lat, $lon"' $FILE_NAME.json > $FILE_NAME_tmp.json
+hasLatitude=$(jq '.GPSLatitude' /$FILE_NAME.json)
+hasLongitude=$(jq '.GPSLongitude' /$FILE_NAME.json)
+
+#If the .json file does not have geo-data, replace it
+if [[ -z $hasLatitude || -n $hasLatitude || -z $hasLongitude || -n $hasLongitude ]]
+  then
+      echo "Updating GPS coordinates"
+      jq --arg lat $lat --arg long $long '.GPSLatitude=$lat | .GPSLongitude=$long' $jsonFileName > /$FILE_NAME.json.tmp
+      mv /$FILE_NAME.json.tmp /$FILE_NAME.json
+  else
+      echo "GPS coordinates are present in the json file"
 fi
-mv $FILE_NAME_tmp.json $FILE_NAME.json
 
 
 aws s3 cp $FILE_NAME"_labels.png" $AWS_PATH/$FILE_NAME"_labels.png" --acl 'public-read'
