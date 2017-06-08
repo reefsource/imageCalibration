@@ -32,6 +32,7 @@ ENV XAPPLRESDIR /opt/mcr/v901/X11/app-defaults
 
 COPY bin/image-analyze-aws.sh /image-analyze-aws.sh
 COPY bin/image-analyze.sh /image-analyze.sh
+COPY bin/convertDegToDecimal.py /convertDegToDecimal.py
 
 COPY libs/analyzeImage /analyzeImage
 COPY libs/meta.mat /data/meta.mat

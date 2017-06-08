@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 inputFileName=$1
 upload_id=$2
 long=$3
@@ -28,11 +30,17 @@ export LD_LIBRARY_PATH=""
 hasLatitude=$(jq '.GPSLatitude' /$FILE_NAME.json)
 hasLongitude=$(jq '.GPSLongitude' /$FILE_NAME.json)
 
+
+
 #If the .json file does not have geo-data, replace it
 if [[ -z $hasLatitude || -n $hasLatitude || -z $hasLongitude || -n $hasLongitude ]]
   then
+      # convert deg to decimal
+      hasLatitude="$(python /convertDegToDecimal.py $hasLatitude)"
+      hasLongitude="$(python /convertDegToDecimal.py $hasLongitude)"
+
       echo "Updating GPS coordinates"
-      jq --arg lat $lat --arg long $long '.GPSLatitude=$lat | .GPSLongitude=$long' $jsonFileName > /$FILE_NAME.json.tmp
+      jq --arg lat $lat --arg long $long '.GPSLatitude=$lat | .GPSLongitude=$long' ${FILE_NAME}.json > /${FILE_NAME}.json.tmp
       mv /$FILE_NAME.json.tmp /$FILE_NAME.json
   else
       echo "GPS coordinates are present in the json file"
