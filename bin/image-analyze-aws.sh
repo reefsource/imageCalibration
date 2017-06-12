@@ -30,7 +30,7 @@ echo "File name: $FILE_NAME"
 aws s3 cp $inputFileName /$FILE_NAME.GPR
 aws s3 cp $AWS_PATH/${FILE_NAME}_stage1.json /$FILE_NAME.json
 
-LD_LIBRARY_PATH="/opt/mcr/v901/runtime/glnxa64:/opt/mcr/v901/bin/glnxa64:/opt/mcr/v901/sys/os/glnxa64" /analyzeImage /$FILE_NAME.GPR "path" "/data"
+if ! LD_LIBRARY_PATH="/opt/mcr/v901/runtime/glnxa64:/opt/mcr/v901/bin/glnxa64:/opt/mcr/v901/sys/os/glnxa64" /analyzeImage /$FILE_NAME.GPR "path" "/data"; then submitError "analyzeImage failed" ; fi
 
 hasLatitude=$(jq '.GPSLatitude' /$FILE_NAME.json)
 hasLongitude=$(jq '.GPSLongitude' /$FILE_NAME.json)
