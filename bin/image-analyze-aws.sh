@@ -16,6 +16,18 @@ echo "Analyzing file: $inputFileName"
 echo "AWS path: $AWS_PATH"
 echo "File name: $FILE_NAME"
 
+function submitResult {
+    jq -n --arg upload_id "$upload_id" --arg stage "stage_2" --arg result "$1" '{uploaded_file_id: $upload_id, stage: $stage, json: $result}' | curl -v \
+        -H "Content-Type: application/json" \
+        -H "Authorization: Token ${AUTH_TOKEN}" \
+        -X POST -d@- http://coralreefsource.org/api/v1/results/submit/
+}
+
+function submitError {
+   submitResult "{\"error\": \"$1\"}"
+   exit -1
+}
+
 aws s3 cp $inputFileName /$FILE_NAME.GPR
 aws s3 cp $AWS_PATH/${FILE_NAME}_stage1.json /$FILE_NAME.json
 
