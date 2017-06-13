@@ -32,14 +32,13 @@ ENV XAPPLRESDIR /opt/mcr/v901/X11/app-defaults
 
 COPY bin/image-analyze-aws.sh /image-analyze-aws.sh
 COPY bin/image-analyze.sh /image-analyze.sh
-COPY bin/convertDegToDecimal.py /convertDegToDecimal.py
 
 COPY libs/analyzeImage /analyzeImage
 COPY libs/meta.mat /data/meta.mat
 COPY libs/normalizer.mat /data/descriptors/normalizer.mat
 COPY libs/libsvm /data/libsvm
 COPY libs/model.dat /data/descriptors/model.dat
-COPY libs/svmLinearData.mat /data/svmLinearData.mat
+COPY libs/svmLinearDataDeDepth.mat /data/svmLinearDataDeDepth.mat
 
 WORKDIR /data/libsvm
 RUN make clean
