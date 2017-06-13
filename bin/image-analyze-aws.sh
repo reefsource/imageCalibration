@@ -19,12 +19,7 @@ echo "File name: $FILE_NAME"
 aws s3 cp $inputFileName /$FILE_NAME.GPR
 aws s3 cp $AWS_PATH/${FILE_NAME}_stage1.json /$FILE_NAME.json
 
-# This is necessary to run Matlab Runtime Environment
-# But causes some conflicts with awscli
-# This is why we delete the LD_LIBRARY_PATH after the call
-export LD_LIBRARY_PATH="/opt/mcr/v901/runtime/glnxa64:/opt/mcr/v901/bin/glnxa64:/opt/mcr/v901/sys/os/glnxa64"
-/analyzeImage /$FILE_NAME.GPR "path" "/data" "currentPixelCmRatio" 12
-export LD_LIBRARY_PATH=""
+if ! LD_LIBRARY_PATH="/opt/mcr/v901/runtime/glnxa64:/opt/mcr/v901/bin/glnxa64:/opt/mcr/v901/sys/os/glnxa64" /analyzeImage /$FILE_NAME.GPR "path" "/data" "currentPixelCmRatio" 12; then submitError "analyzeImage failed" ; fi
 
 
 #If the .json file does not have geo-data, replace it
