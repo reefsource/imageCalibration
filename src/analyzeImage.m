@@ -16,9 +16,6 @@ jsonFileName = fullfile(path,sprintf('%s.json',imageFileName));
 
 if exist(jsonFileName,'file')
     jsonData = loadjson(jsonFileName);
-    if iscell(jsonData)
-        jsonData = jsonData{1};
-    end
 else
     jsonData = struct();
 end
@@ -40,6 +37,10 @@ I = readRawImage(fileName);
 I = double(I);
 
 I = imageExpose(I,0.99,[]);
+I = deDepthImage(I);
+I = imageExpose(I,0.99,[]);
+
+
 if isempty(prevI)
     prevI = imresize(I,[previewHeight previewWidth],'nearest');
 end
@@ -50,15 +51,6 @@ mask = segmentImage(prevI,varargin{:});
 % mask = segmentImage(I.^(1/2.2),varargin{:});
 
 if sum(mask(:)==1) == 0, mask = []; end
-
-if inputs.DEBUG
-    figure; 
-    imagesc(mask);
-    set(gca,'position',[0 0 1 1],'units','normalized');
-    % print('-dpng','Mask.png');
-end
-
-   
 
 % Compute the histogram
 [histogram, map] = computeHistogramML(I, 'mask', mask, varargin{:});

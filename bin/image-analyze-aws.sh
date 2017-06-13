@@ -23,7 +23,7 @@ aws s3 cp $AWS_PATH/${FILE_NAME}_stage1.json /$FILE_NAME.json
 # But causes some conflicts with awscli
 # This is why we delete the LD_LIBRARY_PATH after the call
 export LD_LIBRARY_PATH="/opt/mcr/v901/runtime/glnxa64:/opt/mcr/v901/bin/glnxa64:/opt/mcr/v901/sys/os/glnxa64"
-/analyzeImage /$FILE_NAME.GPR "path" "/data"
+/analyzeImage /$FILE_NAME.GPR "path" "/data" "currentPixelCmRatio" 12
 export LD_LIBRARY_PATH=""
 
 
@@ -35,10 +35,6 @@ hasLongitude=$(jq '.GPSLongitude' /$FILE_NAME.json)
 #If the .json file does not have geo-data, replace it
 if [[ -z $hasLatitude || -n $hasLatitude || -z $hasLongitude || -n $hasLongitude ]]
   then
-      # convert deg to decimal
-      hasLatitude="$(python /convertDegToDecimal.py $hasLatitude)"
-      hasLongitude="$(python /convertDegToDecimal.py $hasLongitude)"
-
       echo "Updating GPS coordinates"
       jq --arg lat $lat --arg long $long '.GPSLatitude=$lat | .GPSLongitude=$long' ${FILE_NAME}.json > /${FILE_NAME}.json.tmp
       mv /$FILE_NAME.json.tmp /$FILE_NAME.json

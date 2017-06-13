@@ -28,7 +28,7 @@ Ivec = reshape(I,[h*w,c]);
 Ivec = Ivec(mask(:),2:3);
 
 if inputs.linear
-    load(fullfile(inputs.path,'data','svmLinearData.mat'));
+    load(fullfile(inputs.path,'data','svmLinearDataDeDepth.mat'));
 else
     load(fullfile(inputs.path,'data','svmGammaData.mat'));
 end

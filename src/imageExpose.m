@@ -28,6 +28,9 @@ locBlack = find(chist <= 1-percent,1,'last');
 
 newMax = bins(locSat);
 newMin = bins(locBlack);
+if isempty(newMin),
+    newMin = 0;
+end
 
 result = (imgNorm - newMin)/(newMax - newMin);
 result = max(min(result,1),0);
