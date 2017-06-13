@@ -27,17 +27,15 @@ export LD_LIBRARY_PATH="/opt/mcr/v901/runtime/glnxa64:/opt/mcr/v901/bin/glnxa64:
 export LD_LIBRARY_PATH=""
 
 
+#If the .json file does not have geo-data, replace it
 hasLatitude=$(jq '.GPSLatitude' /$FILE_NAME.json)
 hasLongitude=$(jq '.GPSLongitude' /$FILE_NAME.json)
 
-
-
-#If the .json file does not have geo-data, replace it
 if [[ -z $hasLatitude || -n $hasLatitude || -z $hasLongitude || -n $hasLongitude ]]
   then
       echo "Updating GPS coordinates"
-      jq --arg lat $lat --arg long $long '.GPSLatitude=$lat | .GPSLongitude=$long' ${FILE_NAME}.json > /${FILE_NAME}.json.tmp
-      mv /$FILE_NAME.json.tmp /$FILE_NAME.json
+      jq --arg lat $lat --arg long $long --arg dateTime $album_date '.GPSLatitude=$lat | .GPSLongitude=$long | .GPSDateTime=$dateTime' ${FILE_NAME}".json" > /${FILE_NAME}".json.tmp"
+      mv /$FILE_NAME".json.tmp" /$FILE_NAME".json"
   else
       echo "GPS coordinates are present in the json file"
 fi
