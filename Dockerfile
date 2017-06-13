@@ -31,14 +31,15 @@ RUN mkdir /mcr-install && \
 ENV XAPPLRESDIR /opt/mcr/v901/X11/app-defaults
 
 COPY bin/image-analyze-aws.sh /image-analyze-aws.sh
-COPY bin/image-analyze.sh /image-analyze.sh
+
+COPY libs/libsvm /external/libsvm
 
 COPY libs/analyzeImage /analyzeImage
-COPY libs/meta.mat /data/meta.mat
-COPY libs/normalizer.mat /data/descriptors/normalizer.mat
-COPY libs/libsvm /data/libsvm
-COPY libs/model.dat /data/descriptors/model.dat
-COPY libs/svmLinearDataDeDepth.mat /data/svmLinearDataDeDepth.mat
+
+COPY libs/meta.mat /external/data/meta.mat
+COPY libs/normalizer.mat /external/data/normalizer.mat
+COPY libs/model.dat /external/data/model.dat
+COPY libs/svmLinearDataDeDepth.mat /external/data/svmLinearDataDeDepth.mat
 
 WORKDIR /data/libsvm
 RUN make clean

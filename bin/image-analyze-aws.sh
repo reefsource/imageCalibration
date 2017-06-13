@@ -31,7 +31,7 @@ function submitError {
 aws s3 cp $inputFileName /$FILE_NAME.GPR
 aws s3 cp $AWS_PATH/${FILE_NAME}_stage1.json /$FILE_NAME.json
 
-if ! LD_LIBRARY_PATH="/opt/mcr/v901/runtime/glnxa64:/opt/mcr/v901/bin/glnxa64:/opt/mcr/v901/sys/os/glnxa64" /analyzeImage /$FILE_NAME.GPR "path" "/data" "currentPixelCmRatio" 12; then submitError "analyzeImage failed" ; fi
+if ! LD_LIBRARY_PATH="/opt/mcr/v901/runtime/glnxa64:/opt/mcr/v901/bin/glnxa64:/opt/mcr/v901/sys/os/glnxa64" /analyzeImage /$FILE_NAME".GPR" "path" "/external" "currentPixelCmRatio" "12"; then submitError "analyzeImage failed" ; fi
 
 
 #If the .json file does not have geo-data, replace it
