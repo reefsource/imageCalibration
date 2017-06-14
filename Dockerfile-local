@@ -30,20 +30,20 @@ RUN mkdir /mcr-install && \
 # ENV LD_LIBRARY_PATH /opt/mcr/v901/runtime/glnxa64:/opt/mcr/v901/bin/glnxa64:/opt/mcr/v901/sys/os/glnxa64
 ENV XAPPLRESDIR /opt/mcr/v901/X11/app-defaults
 
-COPY bin/image-analyze-aws.sh /image-analyze-aws.sh
+COPY bin/image-analyze.sh /image-analyze.sh
 
-COPY libs/libsvm /external/libsvm
+COPY analyzeImage /analyzeImage
 
-COPY libs/analyzeImage /analyzeImage
+COPY external/libsvm /external/libsvm
 
-COPY libs/meta.mat /external/data/meta.mat
-COPY libs/normalizer.mat /external/data/normalizer.mat
-COPY libs/model.dat /external/data/model.dat
-COPY libs/svmLinearDataDeDepth.mat /external/data/svmLinearDataDeDepth.mat
+COPY external/data/meta.mat /external/data/meta.mat
+COPY external/data/normalizer.mat /external/data/normalizer.mat
+COPY external/data/model.dat /external/data/model.dat
+COPY external/data/svmLinearDataDeDepth.mat /external/data/svmLinearDataDeDepth.mat
 
 WORKDIR /external/libsvm
 RUN make clean
 RUN make
 WORKDIR /
 
-ENTRYPOINT ["./image-analyze-aws.sh"]
+ENTRYPOINT ["./image-analyze.sh"]
