@@ -40,17 +40,18 @@ hasLongitude=$(jq '.GPSLongitude' /$FILE_NAME.json)
 
 if [[ -z $hasLatitude || -n $hasLatitude || -z $hasLongitude || -n $hasLongitude ]]
   then
-      echo "Updating GPS coordinates"
+      echo "Updating GPS coordinates $lat $long $album_date"
       jq --arg lat $lat --arg long $long --arg dateTime $album_date '.GPSLatitude=$lat | .GPSLongitude=$long | .GPSDateTime=$dateTime' ${FILE_NAME}".json" > /${FILE_NAME}".json.tmp"
       mv /$FILE_NAME".json.tmp" /$FILE_NAME".json"
   else
       echo "GPS coordinates are present in the json file"
 fi
 
-
+echo "Copying files to S3"
 aws s3 cp $FILE_NAME"_labels.png" $AWS_PATH/$FILE_NAME"_labels.png" --acl 'public-read'
 aws s3 cp $FILE_NAME.json $AWS_PATH/${FILE_NAME}_stage2.json
 
+echo "Done"
 jq -n --arg upload_id "$upload_id" --arg stage "stage_2" '{uploaded_file_id: $upload_id, stage: $stage}' | curl -v \
     -H "Content-Type: application/json" \
     -H "Authorization: Token ${AUTH_TOKEN}" \
