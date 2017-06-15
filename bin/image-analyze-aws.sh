@@ -41,7 +41,7 @@ hasLongitude=$(jq '.GPSLongitude' /$FILE_NAME.json)
 if [[ -z $hasLatitude || -n $hasLatitude || -z $hasLongitude || -n $hasLongitude ]]
   then
       echo "Updating GPS coordinates $lat $long $album_date"
-      jq --arg lat "$lat" --arg long "$long" --arg dateTime "$album_date" '.GPSLatitude=$lat | .GPSLongitude=$long | .GPSDateTime=$dateTime' ${FILE_NAME}".json" > /${FILE_NAME}".json.tmp"
+      jq --arg lat "$lat" --arg long "$long" '.GPSLatitude=$lat | .GPSLongitude=$long' ${FILE_NAME}".json" > /${FILE_NAME}".json.tmp"
       mv /$FILE_NAME".json.tmp" /$FILE_NAME".json"
   else
       echo "GPS coordinates are present in the json file"
