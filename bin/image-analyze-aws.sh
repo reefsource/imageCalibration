@@ -51,8 +51,5 @@ echo "Copying files to S3"
 aws s3 cp $FILE_NAME"_labels.png" $AWS_PATH/$FILE_NAME"_labels.png" --acl 'public-read'
 aws s3 cp $FILE_NAME.json $AWS_PATH/${FILE_NAME}_stage2.json
 
+submitResult "`cat ${FILE_NAME}.json`"
 echo "Done"
-jq -n --arg upload_id "$upload_id" --arg stage "stage_2" '{uploaded_file_id: $upload_id, stage: $stage}' | curl -v \
-    -H "Content-Type: application/json" \
-    -H "Authorization: Token ${AUTH_TOKEN}" \
-    -X POST -d@- http://coralreefsource.org/api/v1/results/stage2complete/
