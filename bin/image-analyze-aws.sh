@@ -28,8 +28,9 @@ function submitError {
    exit -1
 }
 
-aws s3 cp $inputFileName /$FILE_NAME.GPR
-aws s3 cp $AWS_PATH/${FILE_NAME}_stage1.json /$FILE_NAME.json
+aws s3 cp $inputFileName /$FILE_NAME".GPR"
+aws s3 cp $AWS_PATH/${FILE_NAME}"_preview.jpg" /$FILE_NAME"_preview.jpg"
+aws s3 cp $AWS_PATH/${FILE_NAME}"_stage1.json" /$FILE_NAME".json"
 
 if ! LD_LIBRARY_PATH="/opt/mcr/v901/runtime/glnxa64:/opt/mcr/v901/bin/glnxa64:/opt/mcr/v901/sys/os/glnxa64" /analyzeImage /$FILE_NAME".GPR" "path" "/external" "currentPixelCmRatio" "12"; then submitError "analyzeImage failed" ; fi
 
@@ -48,7 +49,7 @@ if [[ -z $hasLatitude || -n $hasLatitude || -z $hasLongitude || -n $hasLongitude
 fi
 
 echo "Copying files to S3"
-aws s3 cp $FILE_NAME"_labels.png" $AWS_PATH/$FILE_NAME"_labels.png" --acl 'public-read'
+aws s3 cp $FILE_NAME"_labels.jpg" $AWS_PATH/$FILE_NAME"_labels.jpg" --acl 'public-read'
 aws s3 cp $FILE_NAME.json $AWS_PATH/${FILE_NAME}_stage2.json
 
 submitResult "`cat ${FILE_NAME}.json`"

@@ -36,13 +36,13 @@ end
 I = readRawImage(fileName);
 I = double(I);
 
-I = imageExpose(I,0.99,[]);
-I = deDepthImage(I);
+IatDepth = imageExpose(I,0.99,[]);
+I = deDepthImage(IatDepth);
 I = imageExpose(I,0.99,[]);
 
 
 if isempty(prevI)
-    prevI = imresize(I,[previewHeight previewWidth],'nearest');
+    prevI = imresize(IatDepth,[previewHeight previewWidth],'nearest');
 end
 
 % Pre-process the image
@@ -66,7 +66,7 @@ prevIvec = reshape(im2double(prevI),[previewHeight*previewWidth,3]);
 mapRGBvec(~mask(:),:) = prevIvec(~mask(:),:);
 mapRGB = reshape(mapRGBvec,[previewHeight, previewWidth, 3]);
 
-imwrite(mapRGB,fullfile(path,sprintf('%s_labels.png',imageFileName)));
+imwrite(mapRGB,fullfile(path,sprintf('%s_labels.jpg',imageFileName)));
 
 if inputs.DEBUG
     figure; imshow(mapRGB);
@@ -92,7 +92,7 @@ jsonData.coral.percentiles.values = prctile(map(:),jsonData.coral.percentiles.bi
 
 % Final score
 % (At this point it is the same as the mean score)
-jsonData.coral.score = jsonData.coral.mean;
+jsonData.coral.score = round(jsonData.coral.mean*10)/10;
 
 savejson('',jsonData,jsonFileName);
 

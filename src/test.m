@@ -9,10 +9,10 @@ clc;
 %dataDirectory = fullfile('/','Users','hblasinski','Google Drive','Magic Grant 2016-17',...
 %                         'Florida Photos','RAW Files');
 
-dataDirectory = fullfile('/','Users','hblasinski','Desktop','subset');
+dataDirectory = fullfile('/','Users','hblasinski','Desktop','sample2');
 
 files = dir(fullfile(dataDirectory,'*.GPR'));
-for f=5:length(files)
+for f=1:length(files)
     
     cmd = sprintf('docker run -ti --rm -v ''%s'':''/Input'' hblasins/image-preprocess "/Input/%s"',dataDirectory,files(f).name);
     system(cmd);

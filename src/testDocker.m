@@ -6,7 +6,7 @@ clc;
 % dataDirectory = fullfile('/','Users','hblasinski','Documents','MATLAB',...
 %                          'reefsource','imageCalibration','SampleImages');
   
-dataDirectory = fullfile('/','Users','hblasinski','Desktop','subset'); 
+dataDirectory = fullfile('/','Users','hblasinski','Desktop','sample2'); 
 
 
 files = dir(fullfile(dataDirectory,'*.GPR'));
