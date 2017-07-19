@@ -86,6 +86,10 @@ jsonData.coral.mean = jsonData.coral.histogram.bins*jsonData.coral.histogram.val
 [~, id] = max(histogram);
 jsonData.coral.mode = jsonData.coral.histogram.bins(id);
 
+% Number/percentage of coral pixels.
+jsonData.coral.imageFraction = sum(mask(:))/numel(mask);
+jsonData.coral.imagePixels = round(sum(mask(:))/numel(mask)*size(I,1)*size(I,2));
+
 % Percentiles
 jsonData.coral.percentiles.bins = [5 15 25 50 75 85 95];
 jsonData.coral.percentiles.values = prctile(map(:),jsonData.coral.percentiles.bins);
